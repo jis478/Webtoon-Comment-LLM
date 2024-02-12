@@ -18,6 +18,10 @@ This repository aims to provide in-depth insights into Webtoon comments using op
 - Frontend App: Streamlit
 
 ## Installation
+- Install GoogleChrome driver
+  ```bash
+  sudo apt install ./google-chrome-stable_current_amd64.deb'
+
 - Create a Conda environment and install required packages:
   ```bash
   conda create --name <env> --file requirements.txt
@@ -26,9 +30,7 @@ This repository aims to provide in-depth insights into Webtoon comments using op
 - **Step 1: Crawling**
 
   ```bash
-  python crawling_comments.py --title "lore-olympus" --title_id "1320" --start_ep 1 --end_ep 10
-
-  - Once it is completed all the scrapped comments (.pkl for each episode) will be saved at ```./crawling_results/<title_id>/``` 
+  python crawling_comments.py --title "lore-olympus" --title_id "1320" --start_ep 1 --end_ep 10 
 
 - **Step 2: Parsing and cleaning**
    - To be updated
