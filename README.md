@@ -4,18 +4,16 @@
 This repository aims to provide in-depth insights into Webtoon comments using open-source Language Model Models (LLMs) and the Retrieval Augmented Generation (RAG) framework.
 
 ## Functions
-- **Crawling**: Scrapes Webtoon comments using Selenium.
-- **Parsing and Cleaning**: Processes and cleans the scraped data using Pandas.
-- **LLM Loading**: Loads pre-trained Language Model Models (LLMs) such as Mixtral and OpenChat.
-- **RAG Setup**: Sets up the Retrieval Augmented Generation (RAG) framework for generating responses.
-- **App Building**: Develops a Streamlit frontend application for interacting with the analyzed data.
+- **Crawling & Parsing**: Scrapes Webtoon comments using Selenium and parsed them accordingly
+- **LLM Loading**: Loads LLM such as Mixtral and OpenChat
+- **RAG Setup**: Sets up the RAG framework for generating responses
+- **App Building**: Chat-based Streamlit app for analyzing comments
 
 ## Tech Stack
 - Crawling and Parsing: Selenium and Pandas
 - Backend (LLM serving): Ollama API
 - RAG: Langchain
-- LLMs: Mixtral, OpenChat, etc.
-- Frontend App: Streamlit
+- Frontend (App): Streamlit
 
 ## Installation
 - Install GoogleChrome driver
@@ -27,18 +25,27 @@ This repository aims to provide in-depth insights into Webtoon comments using op
   conda create --name <env> --file requirements.txt
 
 ## Usage
-- **Step 1: Crawling**
+- **Step 0: Conda env activation**
+
+  ```bash
+  conda activate <env>
+
+- **Step 1: Crawling & parsing**
 
   ```bash
   python crawling_comments.py --title "lore-olympus" --title_id "1320" --start_ep 1 --end_ep 10 
 
-- **Step 2: Parsing and cleaning**
-   - To be updated
-
-- **Step 3: App building**
-   - To be updated
-
+- **Step 2: Ollama serve**
   
-## License
-To be updated
+  ```bash
+  CUDA_VISIBLE_DEVICES=0 ollama serve
 
+- **Step 3: Streamlit app**
+
+  - execution (Upload the csv file created in Step 1)  
+
+    ```bash
+    streamlit run app.py --server.port 7087 --server.address 0.0.0.0
+  
+## Upcoming features
+- More advanced features (within the RAG pipeline) will be introduced

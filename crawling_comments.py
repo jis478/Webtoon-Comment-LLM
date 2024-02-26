@@ -79,7 +79,7 @@ def parsing(comments_all, title, title_id, ep_num, current_page_num):
     return df
 
 
-def process_episodes(title, title_id, start_ep, end_ep, save_folder):
+def process_episodes(title, title_id, start_ep, end_ep, save_crawling, save_folder):
     os.makedirs(save_folder, exist_ok=True)
     total_ep_df = pd.DataFrame()
 
@@ -97,7 +97,7 @@ def process_episodes(title, title_id, start_ep, end_ep, save_folder):
 
         while flag:
 
-            logging.info(f"    Crawling page #{current_page_num} in episode {ep_num}.")
+            logging.info(f"Crawling page #{current_page_num} in episode {ep_num}.")
             comments = driver.find_elements(By.CSS_SELECTOR, "ul.u_cbox_list")
             for comment in comments:
                 comment_text = driver.execute_script('return arguments[0].innerText;', comment)
@@ -118,38 +118,44 @@ def process_episodes(title, title_id, start_ep, end_ep, save_folder):
                 flag = False
                 break
    
-            file_path = os.path.join(save_folder, f'{title}_{ep_num}.pkl')
-        
-        with open(file_path, 'wb') as file:
-            pickle.dump(all_comments, file)
-        logging.info(f"Crawling completed")
+            if save_crawling:
+                file_path = os.path.join(save_folder, f'{title}_{ep_num}.pkl')        
+                with open(file_path, 'wb') as file:
+                    pickle.dump(all_comments, file)
         
         single_ep_df = parsing(all_comments, title, title_id, ep_num, current_page_num)    
         total_ep_df = pd.concat([total_ep_df, single_ep_df], ignore_index=True)
         
     driver.quit()  # Close the browser
     total_ep_df.to_pickle(f'{title}_{start_ep}_{end_ep}.pkl')
+    logging.info(f"Crawling & parsing completed")
         
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Web crawling for Webtoon episodes')
+    parser = argparse.ArgumentParser(description='Web crawler & parser for Webtoon episodes')
     parser.add_argument('--title', type=str, default="lore-olympus", help='title')
     parser.add_argument('--title_id', type=int, default=1320, help='title_id')
     parser.add_argument('--start_ep', type=int, default=1, help='Starting episode number')
     parser.add_argument('--end_ep', type=int, default=10, help='Ending episode number')
+    parser.add_argument('--save_crawling', type=bool, default=True, help='Saving raw crawling data')
     args = parser.parse_args()
 
     title = args.title
     title_id = args.title_id
     start_ep = args.start_ep
     end_ep = args.end_ep
-    save_folder = os.path.join('./crawling_results/', str(title_id))
+    save_crawling = args.save_crawling
+    save_folder = os.path.join('./results/', str(title_id))
     os.makedirs(save_folder, exist_ok=True)
+
+    if save_crawling:
+        crawling_folder = os.path.join(save_folder, "raw_crawling")
+        os.makedirs(crawling_folder, exist_ok=True)
 
     logging.basicConfig(filename=os.path.join(save_folder,f'{title_id}_{start_ep}_{end_ep}.log'), level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info(f"Start processing for {title} ({str(title_id)}) from episode {str(start_ep)} to {str(end_ep)}...")
-    process_episodes(title, title_id, start_ep, end_ep, save_folder)
+    process_episodes(title, title_id, start_ep, end_ep, save_crawling, save_folder)
     logging.info("Episodes processing completed.")
 
 
