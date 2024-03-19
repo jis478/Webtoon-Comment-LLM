@@ -46,6 +46,9 @@ This repository aims to provide in-depth insights into Webtoon comments using op
 
     ```bash
     streamlit run app.py --server.port 7087 --server.address 0.0.0.0
-  
+
+## Example
+   ![image](https://github.com/jis478/Webtoon-Comment-LLM/assets/19499513/cbdc25ae-9e3a-4afb-a879-7064c2536f4d)
+
 ## Upcoming features
 - More advanced features (within the RAG pipeline) will be introduced
